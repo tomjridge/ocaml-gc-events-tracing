@@ -1,0 +1,3 @@
+; (env
+;  (_
+;   (flags (:standard -inline 0)))) ; no inlining; but doesn't work for bytecode

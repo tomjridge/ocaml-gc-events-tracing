@@ -1,0 +1,3 @@
+(executable
+ (name queens)
+ (libraries memtrace))
