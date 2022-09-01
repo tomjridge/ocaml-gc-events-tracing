@@ -1,0 +1,3 @@
+(executable
+ (name replay)
+ (libraries base memtrace))
