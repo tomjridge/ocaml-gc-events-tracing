@@ -1,3 +1,19 @@
+(library
+ (name raw_shared)
+ (modules Raw_shared)
+ (libraries memtrace)) 
+
 (executable
  (name replay)
- (libraries base memtrace))
+ (modules Replay)
+ (libraries base memtrace raw_shared))
+
+(executable
+ (name replay_raw)
+ (modules Replay_raw)
+ (libraries base memtrace raw_shared))
+
+(executable
+ (name translate_memtrace_to_raw)
+ (modules Translate_memtrace_to_raw)
+ (libraries memtrace raw_shared))

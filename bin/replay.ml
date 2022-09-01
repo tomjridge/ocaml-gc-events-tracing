@@ -41,11 +41,15 @@ let replay trace =
         (* FIXME do we want to do anything here? *)
         ())
 
-let _main = 
+let main () = 
   Memtrace.trace_if_requested ();
   (* first argument is the path to the .ctf file *)
   let trace = Trace.Reader.open_ ~filename:(Sys.get_argv ()).(1) in
-  replay trace
+  replay trace;
+  Trace.Reader.close trace;
+  ()
+
+let _ = main ()
 
 
 
