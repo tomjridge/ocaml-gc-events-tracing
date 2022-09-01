@@ -1,38 +1,38 @@
-0000000198 0000000000 alloc 3 len=2    0: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000201 0000000001 alloc 2 len=1    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000203 0000000002 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000203 0000000003 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000204 0000000004 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000204 0000000005 alloc 4 len=3    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000204 0000000006 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000204 0000000007 alloc 5 len=4    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000204 0000000008 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000205 0000000009 alloc 6 len=5    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000205 0000000010 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000205 0000000011 alloc 7 len=6    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000205 0000000012 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000207 0000000013 alloc 8 len=7    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000207 0000000014 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000207 0000000015 alloc 9 len=8    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000207 0000000016 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000207 0000000017 alloc 10 len=9    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000208 0000000018 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000208 0000000019 alloc 11 len=10    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
-0000000208 0000000020 alloc 3 len=2    2: $46939485427876 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
-0000000305 0000000000 promote
+0000000198 0000000000 alloc 3 len=2    0: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000202 0000000001 alloc 2 len=1    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000203 0000000002 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000204 0000000003 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000204 0000000004 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000204 0000000005 alloc 4 len=3    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000204 0000000006 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000205 0000000007 alloc 5 len=4    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000205 0000000008 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000205 0000000009 alloc 6 len=5    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000205 0000000010 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000205 0000000011 alloc 7 len=6    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000206 0000000012 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000208 0000000013 alloc 8 len=7    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000208 0000000014 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000208 0000000015 alloc 9 len=8    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000208 0000000016 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000209 0000000017 alloc 10 len=9    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000209 0000000018 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000209 0000000019 alloc 11 len=10    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-40 Stdlib__array.init@array.ml:54:13-27
+0000000209 0000000020 alloc 3 len=2    2: $47376663855268 Dune__exe__Simple@examples/simple/simple.ml:20:2-9 Dune__exe__Simple.main@examples/simple/simple.ml:8:10-47
+0000000304 0000000000 promote
 0000000308 0000000001 promote
 0000000308 0000000002 promote
 0000000308 0000000003 promote
 0000000308 0000000004 promote
-0000000309 0000000005 promote
-0000000309 0000000006 promote
-0000000309 0000000007 promote
-0000000309 0000000008 promote
-0000000309 0000000009 promote
-0000000309 0000000010 promote
-0000000309 0000000011 promote
-0000000309 0000000012 promote
-0000000309 0000000013 promote
+0000000308 0000000005 promote
+0000000308 0000000006 promote
+0000000308 0000000007 promote
+0000000308 0000000008 promote
+0000000308 0000000009 promote
+0000000308 0000000010 promote
+0000000308 0000000011 promote
+0000000308 0000000012 promote
+0000000308 0000000013 promote
 0000000309 0000000014 promote
 0000000309 0000000015 promote
 0000000309 0000000016 promote
@@ -40,24 +40,24 @@
 0000000309 0000000018 promote
 0000000309 0000000019 promote
 0000000309 0000000020 promote
-0000000537 0000000000 collect
-0000000537 0000000001 collect
-0000000537 0000000002 collect
-0000000537 0000000003 collect
-0000000537 0000000004 collect
-0000000537 0000000005 collect
-0000000537 0000000006 collect
-0000000537 0000000007 collect
-0000000537 0000000008 collect
-0000000537 0000000009 collect
-0000000537 0000000010 collect
-0000000538 0000000011 collect
-0000000538 0000000012 collect
-0000000538 0000000013 collect
-0000000538 0000000014 collect
-0000000538 0000000015 collect
-0000000538 0000000016 collect
-0000000538 0000000017 collect
-0000000538 0000000018 collect
-0000000538 0000000019 collect
-0000000538 0000000020 collect
+0000000538 0000000000 collect
+0000000538 0000000001 collect
+0000000538 0000000002 collect
+0000000538 0000000003 collect
+0000000538 0000000004 collect
+0000000538 0000000005 collect
+0000000538 0000000006 collect
+0000000538 0000000007 collect
+0000000538 0000000008 collect
+0000000538 0000000009 collect
+0000000539 0000000010 collect
+0000000539 0000000011 collect
+0000000539 0000000012 collect
+0000000539 0000000013 collect
+0000000539 0000000014 collect
+0000000539 0000000015 collect
+0000000539 0000000016 collect
+0000000539 0000000017 collect
+0000000539 0000000018 collect
+0000000539 0000000019 collect
+0000000539 0000000020 collect
