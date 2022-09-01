@@ -21,3 +21,17 @@ In addition, we want a small program that consumes the trace and simulates the b
 ## Memtrace and memtrace-viewer
 
 Memtrace https://github.com/janestreet/memtrace is a "streaming client for OCaml's memprof". By setting an envvar, and inserting a single "start profiling" instruction into a "main" function in your OCaml application, memtrace will log all Memprof events to a trace file. This trace file can then be viewed by memtrace-viewer https://github.com/janestreet/memtrace_viewer. The trace file uses the "ctf" (Common Trace Format) file format, so is potentially also viewable using other tools. The viewer is described in a blog post https://blog.janestreet.com/finding-memory-leaks-with-memtrace/; the interface runs in a browser and looks basic, but the functionality is fairly sophisticated.
+
+
+
+## Replaying a memtrace
+
+We can use memtrace to record Gc.Memprof events (allocation on minor/major heap; promotion; collection from minor/major heap). We can then simulate (to a very rough extent) the memory behaviour, by reading the memtrace file: If we see an `Alloc` we can allocate an int array of the appropriate size, and stash this object in a hashtable, indexed by object id; if we see a `Collect` of a given object id, we can remove that object from the hashtable (thereby making it unreachable), and hope that GC (in the simulating runtime) collects the object in a timely manner. 
+
+This approach is implemented in the `bin-replay/replay.exe` tool. 
+
+We would, of course, want to validate that the simulated behaviour really does match the traced behaviour (at least as far as GC is concerned). A simple approach would be to attempt to memtrace the simulating program (i.e., `replay.exe`). However, memtrace itself performs a significant amount of allocation and deallocation while reading and iterating over the trace. The resulting "memtrace of the simulated memtrace" would include all these memtrace-internal memory events. In effect, we are no longer simulating _only_ the original traced behaviour, but instead have all the memtrace overhead.
+
+One point of view is that we are only doing this to validate that replay is correctly simulating the original traced behaviour. So if we filter out all the allocs and deallocs due to memtrace, and ignore timings, we should get the "simulated behaviour without the memtrace overhead", which should be enough to confirm that `replay.exe` is working properly.
+
+Another approach would be to avoid the use of memtrace when running replay. We might instead use a much simpler file format, which could be mmap'ed or read sequentially without any memtrace overhead. Then _that_ could be memtraced (since the overhead from memtrace iterating through the trace would not be present).
