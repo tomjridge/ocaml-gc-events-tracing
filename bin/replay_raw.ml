@@ -3,13 +3,13 @@
 let replay in_ch = 
   let allocs = Hashtbl.create 20 in
   let alloc_cb ~obj_id ~length = 
-    Printf.printf "alloc_cb called %d %d\n" obj_id length;
+    (* Printf.printf "alloc_cb called %d %d\n" obj_id length; *)
     let obj = Base.Array.init length ~f:(fun _ -> 1234) in
     Hashtbl.add allocs obj_id obj;
     ()
   in
   let collect_cb ~obj_id = 
-    Printf.printf "collect_cb called %d\n" obj_id;
+    (* Printf.printf "collect_cb called %d\n" obj_id; *)
     Hashtbl.remove allocs obj_id
   in
   try

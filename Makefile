@@ -6,7 +6,7 @@ all:
 	dune exec -- bin/translate_memtrace_to_raw.exe simple.ctf simple.raw
 	dune build bin/replay_raw.exe
 	rm -f replay_raw.ctf
-	MEMTRACE=replay_raw.ctf dune exec -- bin/replay_raw.exe simple.raw
+	MEMTRACE=replay_raw.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw.exe simple.raw
 	./dump_trace.exe replay_raw.ctf > replay_raw.dump_trace
 
 # replay the allocations from simple.exe
