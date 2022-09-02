@@ -1,3 +1,9 @@
 (executable
  (name lifetimes_of_queued_objects)
+ (modules Lifetimes_of_queued_objects)
+ (libraries base stdio memtrace))
+
+(executable
+ (name lifetimes_of_objects)
+ (modules Lifetimes_of_objects)
  (libraries base stdio memtrace))
