@@ -17,3 +17,8 @@
  (name translate_memtrace_to_raw)
  (modules Translate_memtrace_to_raw)
  (libraries memtrace raw_shared))
+
+(executable
+ (name alloc_summary)
+ (modules Alloc_summary)
+ (libraries memtrace))

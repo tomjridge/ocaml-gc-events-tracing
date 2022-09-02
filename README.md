@@ -67,3 +67,94 @@ The topmost image is the original (including all objects, not just the queue-rel
 Beyond that, in the top graph we see some banding - downward right bands, mostly short, before the final long band. In the bottom graph, there is some banding, but qualitatively this is completely different. 
 
 Since our replay ignores times completely, we expect the replay to diverge from the original. But here there seems to be no real correspondence at all.
+
+---
+
+One obvious problem is that the `js_of_ocaml-queue.ctf` trace was collected in a completely different environment, and there is no reason to expect that GC during replay even uses the same algorithm as that used when the trace was recorded. So at the very least, we need to use a trace generated in the same environment as we use for the replay.
+
+---
+
+Before we do this, we can run some other checks on the replay and compare it to the original. So far we compared object lifetimes. We can instead compare the overall total used memory over time. memtrace-viewer can do this. For `js_of_ocaml-queue.ctf` we have:
+
+<img src="README.assets/Screenshot_20220902_143338.png" alt="Screenshot_20220902_143338" style="zoom: 50%;" />
+
+For the replay we have:
+
+<img src="README.assets/Screenshot_20220902_143517.png" alt="Screenshot_20220902_143517" style="zoom:50%;" />
+
+Which reveals that even the very basic allocation pattern doesn't match, nor the totals, not anything else. What is going on? We can write a simple script to summarize the allocations, giving the count of the number of allocations for each size. For `js_of_ocaml-queue.ctf` we get: 
+
+```
+size count
+==== =====
+1 159
+2 225
+3 62
+4 168
+5 265
+6 19
+7 14
+8 1
+9 5
+12 2
+14 1
+32 1
+39 1
+64 1
+465818 4
+474300 11
+474311 11
+480135 2
+604763 1
+```
+
+And for `replay_raw.ctf` we get: 
+
+```
+size count
+==== =====
+1 159
+2 226
+3 1016
+4 172
+5 265
+6 21
+7 14
+8 1
+9 5
+12 2
+14 1
+32 2
+39 1
+64 3
+128 2
+8203 1
+465818 4
+474300 11
+474311 11
+480135 2
+604763 1
+```
+
+These are actually pretty similar. The replay has a few more allocs at various sizes:
+
+```
+1	0
+2	1
+3	954
+4	4
+5	0
+6	2
+7	0
+8	0
+9	0
+12	0
+14	0
+32	1
+39	0
+64	2
+128	2
+8203 1
+```
+
+In particular, the allocations of size 3 are likely due to (hashtbl-add-allocs). Other than this the allocations seem to match.

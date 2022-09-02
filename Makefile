@@ -1,5 +1,10 @@
 SHELL:=bash
 
+all-summarize:
+	dune build bin/alloc_summary.exe
+	dune exec -- bin/alloc_summary.exe ctf/js_of_ocaml-queue.ctf
+	dune exec -- bin/alloc_summary.exe ./replay_raw.ctf
+
 all-replay_raw_queue: 
 	dune build examples/memtrace_custom_analysis/lifetimes_of_objects.exe
 	dune exec -- bin/translate_memtrace_to_raw.exe ctf/js_of_ocaml-queue.ctf js_of_ocaml-queue.raw # translate js_of_ocaml-queue.ctf to raw format
