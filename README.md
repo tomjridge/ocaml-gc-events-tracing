@@ -35,3 +35,22 @@ We would, of course, want to validate that the simulated behaviour really does m
 One point of view is that we are only doing this to validate that replay is correctly simulating the original traced behaviour. So if we filter out all the allocs and deallocs due to memtrace, and ignore timings, we should get the "simulated behaviour without the memtrace overhead", which should be enough to confirm that `replay.exe` is working properly.
 
 Another approach would be to avoid the use of memtrace when running replay. We might instead use a much simpler file format, which could be mmap'ed or read sequentially without any memtrace overhead. Then _that_ could be memtraced (since the overhead from memtrace iterating through the trace would not be present).
+
+
+
+## Raw traces
+
+The file `bin/translate_memtrace_to_raw.ml` contains a program that translates a memtrace file (Common Trace Format) to a simpler "raw" trace. The aim is to be able to replay the raw trace whilst avoiding all the allocations that occur when replaying a memtrace.
+
+**Simple example:** The file `examples/simple/simple.ml` is a simple test program that does some allocations of int arrays, sized from 0 to 10. We use memtrace to create `simple.ctf`. The file `simple.ctf` is then translated to `simple.raw` using `translate_memtrace_to_raw.exe`. Note there is also a `simple.dump_trace` which is a human-readable version of `simple.ctf`. Finally, we use `bin/replay_raw.exe` to replay a raw trace. We use memtrace to trace this *replay*, and store the results in `replay_raw.ctf`. Again, the human-readable contents is in `replay_raw.dump_trace`.
+
+
+
+## Comments on `replay_raw`
+
+The file `replay_raw.ctf` is a trace of memory events when using `replay_raw.exe` to simulate the trace of `simple.exe`. How close does it get to simulating the original events?
+
+* `replay_raw.exe` does some allocations when reading the trace file, and other allocations (eg creating the hashtable), when it starts. This makes the replay not a faithful reconstruction of the original events.
+* During the main loop of `replay_raw.exe`, there are calls to array.init (to simulate allocs); the resulting objects are then stored in a hashtable indexed by obj_id, to prevent them being collected immediately. This insertion into the hashtable causes extra allocations, and again makes the replay not a faithful reconstruction of the original events.
+* After the objects are allocated by `simple.ml`, a GC is called; the objects are all reachable so none are collected, and instead they are all promoted to the major heap. The objects are then freed, and GC is called again. This time, all the objects are collected. In the replay, no collections happen, because all that is recorded is object allocations and deallocations. Allocations are simulated by allocating an appropriately sized array and keeping a global reference to it. Deallocations are simulated by just dropping the reference to the object, and expecting GC to collect the object. But if GC never runs, we won't see the collection in the replay. 
+
