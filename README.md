@@ -82,7 +82,7 @@ For the replay we have:
 
 <img src="README.assets/Screenshot_20220902_143517.png" alt="Screenshot_20220902_143517" style="zoom:50%;" />
 
-Which reveals that even the very basic allocation pattern doesn't match, nor the totals, not anything else. What is going on? We can write a simple script to summarize the allocations, giving the count of the number of allocations for each size. For `js_of_ocaml-queue.ctf` we get: 
+Which reveals that even the very basic allocation pattern doesn't match, nor the totals, nor anything else. What is going on? We can write a simple script to summarize the allocations, giving the count of the number of allocations for each size. For `js_of_ocaml-queue.ctf` we get: 
 
 ```
 size count
@@ -157,4 +157,59 @@ These are actually pretty similar. The replay has a few more allocs at various s
 8203 1
 ```
 
-In particular, the allocations of size 3 are likely due to (hashtbl-add-allocs). Other than this the allocations seem to match.
+In particular, the allocations of size 3 are likely due to (hashtbl-add-allocs). Other than this the allocations seem to match. If we compute the sum of the allocations (2022-09-02_replay_stats.ods), we get something like 110MB for the total bytes, whereas on the memtrace-viewer, we have 1.17G total allocated towards the end. So these figures don't agree. 
+
+---
+
+Let's narrow down variables: the environment (`js_of_ocaml-queue.ctf` was recorded a few years ago, on a different OCaml version, on a different machine, with a sample rate of 1e-6). So let's run the queens example, with sample rate 1.0. 
+
+<img src="README.assets/Screenshot_20220902_154312.png" alt="Screenshot_20220902_154312" style="zoom:50%;" />
+
+When we replay we get:
+
+![Screenshot_20220902_154402](README.assets/Screenshot_20220902_154402.png)
+
+The allocation summaries are:
+
+```
+dune exec -- bin/alloc_summary.exe queens.ctf
+                   
+Object allocations:
+size count
+==== =====
+1 95
+2 33785
+3 2065
+4 2060
+5 1965
+8 94
+dune exec -- bin/alloc_summary.exe replay_queens.ctf
+                   
+Object allocations:
+size count
+==== =====
+1 95
+2 33786
+3 42130
+4 2069
+5 1965
+6 7
+8 94
+32 1
+64 2
+128 2
+256 2
+512 2
+1024 2
+2048 2
+4096 2
+8203 1
+```
+
+Again, there are many (hashtbl-add-allocs) at size 3 in the replay.
+
+Let's just check that these figures seem reasonable. For queens.ctf, we can use a spreadsheet to compute the following:
+
+<img src="README.assets/Screenshot_20220902_155330.png" alt="Screenshot_20220902_155330" style="zoom:50%;" />
+
+And the total 1.01MiB does agree with the summary provided by memtrace-viewer.

@@ -1,5 +1,13 @@
 SHELL:=bash
 
+all-replay-queens:
+	dune exec -- bin/translate_memtrace_to_raw.exe queens.ctf queens.raw # translate to raw
+	MEMTRACE=replay_queens.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw.exe queens.raw # replay raw and record memtrace
+	dune exec -- bin/alloc_summary.exe queens.ctf
+	dune exec -- bin/alloc_summary.exe replay_queens.ctf
+# now check memtrace-viewer for replay_queens, and compare with queens
+
+
 all-summarize:
 	dune build bin/alloc_summary.exe
 	dune exec -- bin/alloc_summary.exe ctf/js_of_ocaml-queue.ctf
