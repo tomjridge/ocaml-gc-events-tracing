@@ -58,4 +58,12 @@ The problem is that memtrace records allocs, promotions and collects, but does n
 
 **Scenarios where `replay_raw` performs well:** Let's ignore (init-allocs) and (hashtbl-add-allocs). Then `replay_raw.exe` allocates objects of the correct size in the correct order. It then unlinks these objects in the correct order. If a full GC runs, we expect this set of objects to be collected. If a GC slice runs, then maybe some objects that were collected in one slice in the SUT (the run of `simple.exe`), instead get collected in a later slice in the replay (because, for example, our simple replay code doesn't ensure that the objects are traversed by the GC in the same order that they were in the SUT). But statistically, we sort-of expect things to match up. We could confirm this by replaying another scenario, where lots of objects are allocated and deallocated, and GC kicks in automatically (not via explicit calls, as currently in `simple.exe`). In fact, we could use eg the js_of_ocaml-queue example to test this.
 
-**Attempt to confirm behaviour of `replay_raw`, using `js_of_ocaml-queue.ctf` example:** 
+**Attempt to confirm behaviour of `replay_raw`, using `js_of_ocaml-queue.ctf` example:** The results are in gnuplot1.pdf and gnuplot2.pdf. Visually, these look completely different.
+
+<img src="README.assets/Screenshot_20220902_123120.png" alt="Screenshot_20220902_123120" style="zoom: 33%;" />
+
+The topmost image is the original (including all objects, not just the queue-related objects as in Maurer's article). The one below is the simulation. The second graph seems to have many less lifetimes, presumably because the simulation is executing very quickly, and so multiple objects correspond to a single (x,y) lifetime coordinate.
+
+Beyond that, in the top graph we see some banding - downward right bands, mostly short, before the final long band. In the bottom graph, there is some banding, but qualitatively this is completely different. 
+
+Since our replay ignores times completely, we expect the replay to diverge from the original. But here there seems to be no real correspondence at all.

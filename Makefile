@@ -2,13 +2,13 @@ SHELL:=bash
 
 all-replay_raw_queue: 
 	dune build examples/memtrace_custom_analysis/lifetimes_of_objects.exe
-	dune exec -- bin/translate_memtrace_to_raw.exe ctf/js_of_ocaml-queue.ctf js_of_ocaml-queue.raw
+	dune exec -- bin/translate_memtrace_to_raw.exe ctf/js_of_ocaml-queue.ctf js_of_ocaml-queue.raw # translate js_of_ocaml-queue.ctf to raw format
 	rm -f replay_raw.ctf
-	MEMTRACE=replay_raw.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw.exe js_of_ocaml-queue.raw 
+	MEMTRACE=replay_raw.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw.exe js_of_ocaml-queue.raw # replay js_of_ocaml-queue.raw events
 	echo # now we have the replayed allocs, we want to visually compare them to the original
-	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe replay_raw.ctf > tmp1.pairs
+	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe replay_raw.ctf > tmp1.pairs # replayed events, lifetimes
 	cat tmp1.pairs | gnuplot -p -e "plot '-'" # gnuplot1.pdf
-	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe ctf/js_of_ocaml-queue.ctf > tmp2.pairs
+	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe ctf/js_of_ocaml-queue.ctf > tmp2.pairs # original events, lifetimes
 	cat tmp2.pairs | gnuplot -p -e "plot '-'" # gnuplot2.pdf
 
 
