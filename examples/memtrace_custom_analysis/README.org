@@ -1,0 +1,8 @@
+Files: Most of these are based on
+https://blog.janestreet.com/finding-memory-leaks-with-memtrace/ by Luke Maurer
+
+- lifetimes_of_queued_objects.ml - from Maurer article
+- lifetimes_of_objects.ml - adapted version of above, to print lifetimes of all objects
+- gnuplot0.pdf - a gnuplot (as in Maurer article) of object lifetimes after filtering with
+  lifetimes_of_queued_objects
+- js_of_ocaml-leaky.ctf; js_of_ocaml-queue.ctf - the ctf files from the Maurer article

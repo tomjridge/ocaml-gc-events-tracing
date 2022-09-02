@@ -6,8 +6,11 @@ all-replay_raw_queue:
 	rm -f replay_raw.ctf
 	MEMTRACE=replay_raw.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw.exe js_of_ocaml-queue.raw 
 	echo # now we have the replayed allocs, we want to visually compare them to the original
-	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe replay_raw.ctf > tmp.pairs
-	cat tmp.pairs | gnuplot -p -e "plot '-'" # to make the graph; graph saved as gnuplot1.pdf
+	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe replay_raw.ctf > tmp1.pairs
+	cat tmp1.pairs | gnuplot -p -e "plot '-'" # gnuplot1.pdf
+	dune exec examples/memtrace_custom_analysis/lifetimes_of_objects.exe ctf/js_of_ocaml-queue.ctf > tmp2.pairs
+	cat tmp2.pairs | gnuplot -p -e "plot '-'" # gnuplot2.pdf
+
 
 all-replay_raw: 
 	dune build bin/replay.exe
