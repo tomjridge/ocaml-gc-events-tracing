@@ -24,6 +24,11 @@
  (libraries memtrace raw_shared))
 
 (executable
+ (name translate_with_promote_lookahead)
+ (modules Translate_with_promote_lookahead Ondisk_format_with_lookahead)
+ (libraries memtrace))
+
+(executable
  (name alloc_summary)
  (modules Alloc_summary)
  (libraries memtrace))

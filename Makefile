@@ -1,5 +1,8 @@
 SHELL:=bash
 
+translate-with-promote-lookahead:
+	dune build bin/translate_with_promote_lookahead.exe
+
 all-replay-queens_v2:
 	dune exec -- bin/translate_memtrace_to_raw.exe queens.ctf queens.raw # translate to raw; print max obj_id as side effect
 	MEMTRACE=replay_queens.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw_v2.exe queens.raw 40063 # replay raw and record memtrace
