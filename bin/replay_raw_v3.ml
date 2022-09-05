@@ -1,6 +1,6 @@
 (** Similar to [replay_raw_v2.exe], but using {Ondisk_format_with_lookahead}. *)
 
-open Lookahead_shared
+let _ = assert(Sys.word_size = 64)
 
 let replay in_ch max_obj_id = 
   (* set up an array of pointers to a dummy object; we place objects in the array when the
@@ -13,7 +13,8 @@ let replay in_ch max_obj_id =
   let _ = Gc.full_major () in 
   let alloc_min_cb ~obj_id ~length = 
     ignore(obj_id);
-    let obj = Array.init length (fun _ -> 1234) in
+    (* let obj = Array.init length (fun _ -> 1234) in *)
+    let obj = Bytes.make (8 * length) (* length is measured in words *) '?' in
     (* NOTE don't stash in allocs... obj was collected from minor heap *)
     ignore(obj);
     ()

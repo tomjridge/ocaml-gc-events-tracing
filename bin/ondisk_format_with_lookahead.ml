@@ -82,3 +82,10 @@ alloc_maj_cb:(obj_id:int -> length:int -> unit) ->
 collect_min_cb:(obj_id:int -> unit) -> 
 collect_maj_cb:(obj_id:int -> unit) -> unit
  = read_channel
+
+let iter_channel ~in_ch ~alloc_min_cb ~alloc_maj_cb ~collect_min_cb ~collect_maj_cb = 
+  try 
+    while true do
+      read_channel ~in_ch ~alloc_min_cb ~alloc_maj_cb ~collect_min_cb ~collect_maj_cb
+    done
+  with End_of_file -> ()

@@ -17,7 +17,7 @@ let _ = assert(Sys.word_size = 64)
 let infile = Sys.argv.(1)
 let outfile = Sys.argv.(2)
 
-open Lookahead_shared.Ondisk_format_with_lookahead
+open Ondisk_format_with_lookahead
 
 (* 
 

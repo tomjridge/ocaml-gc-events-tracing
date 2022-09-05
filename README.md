@@ -230,7 +230,7 @@ Clearly the replay does not resemble the original, even with the improvements of
 
 
 
-## Simulating minor heap collection
+## Simulating minor heap collection: `replay_raw_v3`
 
 OCaml has a generational GC. An object is typically allocated first on the minor heap, and when minor collection runs, the object is either collected, or promoted to the major heap. Within the memtrace trace, the events are: Alloc (for allocations), Collect (for collections) and Promote (for promotions from the minor heap to the major heap). With `replay_raw` and `replay_raw_v2` there is no attempt to simulate this minor heap: all objects are allocated as an OCaml array, and immediately linked into the object stash. When the corresponding Collect occurs, the object is unlinked from the stash, with the expectation that GC will then collect the object in a timely fashion. Promote events are ignored.
 
@@ -238,5 +238,10 @@ If we want to simulate the minor heap, we can do the following: During replay, w
 
 To implement this, we should consider another raw file format, with events: Alloc_minor, Alloc_then_promote. For each Alloc event in the memtrace, we can determine whether there is a subsequent Promote... if there is this should be recorded as Alloc_then_promote in the raw trace. (We can't directly simulate Promote events in the trace replay.)
 
+---
 
+This approach is implemented. The memtrace-viewer graph now looks like:
 
+![Screenshot_20220905_151343](README.assets/Screenshot_20220905_151343.png)
+
+Again, this resembles the graph from `replay_raw_v2`, and does _not_ resemble the graph from the original trace. 

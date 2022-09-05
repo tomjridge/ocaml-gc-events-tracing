@@ -1,5 +1,17 @@
 SHELL:=bash
 
+dump:
+	dune build bin/
+	dune exec -- bin/dump.exe ctf queens.ctf > queens.ctf.dump
+	dune exec -- bin/dump.exe raw queens.raw > queens.raw.dump # FIXME only one line output
+	grep --invert-match '^P' queens.ctf.dump > tmp.txt # like queens.ctf.dump, but no promotes
+	diff -q tmp.txt queens.raw.dump # should be identical, except for promotes
+	dune exec -- bin/dump.exe lookahead queens.raw_lookahead > queens_lookahead.dump
+	diff -q queens.raw.dump queens_lookahead.dump # should be identical
+	dune exec -- bin/dump.exe ctf replay_queens.v3.ctf > replay_queens.v3.ctf.dump
+	grep --invert-match '^P' replay_queens.v3.ctf.dump > tmp2.txt # queens.raw.dump obj_id 0 corresponds to tmp2.txt obj_id 40070; 40063 to 80133 (- 80133 40063) = 40070; so at least the pattern of allocations in replay_queens.v3.ctf is as queens.ctf, modulo initial 40069 allocs
+
+
 translate-with-promote-lookahead:
 	dune build bin/translate_with_promote_lookahead.exe
 	OCAMLRUNPARAM=b dune exec -- bin/translate_with_promote_lookahead.exe queens.ctf queens.raw_lookahead

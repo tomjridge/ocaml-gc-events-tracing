@@ -52,3 +52,11 @@ collect_cb:(obj_id:int -> unit) -> unit
 (* NOTE although we try to avoid allocs, the above buffers do indeed alloc, which means
    that we disturb slightly the GC state, which in turn may cause the replay runtime to
    start GC at slightly earlier times than the traced system. FIXME? *)
+
+let iter_channel ~in_ch ~alloc_cb ~collect_cb = 
+  try 
+    while true do
+      read_channel ~in_ch ~alloc_cb ~collect_cb
+    done
+  with End_of_file -> ()
+    
