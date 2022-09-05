@@ -17,7 +17,7 @@ let _ = assert(Sys.word_size = 64)
 let infile = Sys.argv.(1)
 let outfile = Sys.argv.(2)
 
-open Ondisk_format_with_lookahead
+open Lookahead_shared.Ondisk_format_with_lookahead
 
 (* 
 
@@ -53,33 +53,52 @@ let main () =
   let trace = Memtrace.Trace.Reader.open_ ~filename:infile in
   let out_ch = Stdlib.open_out_bin outfile in
   let max_oid = ref 0 in
+  let num_allocs = ref 0 in
+  let num_collects = ref 0 in
+  (* we also record the number of allocs and collects we read from the ctf; this provides
+     a sanity check that we are outputting the same number and type of events as we
+     read *)
+  let read_allocs = ref 0 in
+  let read_collects = ref 0 in
   let q = Queue.create () in
   let map = Hashtbl.create 100 in
   let rec output_from_queue_if_known () = 
     if not (Queue.is_empty q) then 
-      Queue.pop q |> function
+      Queue.peek q |> function
       | Alloc((obj_id:int),length) -> (
           let pr = Hashtbl.find map obj_id in
           match pr with
-          | Unknown -> () (* can't output - don't know if promoted or not *)
+          | Unknown -> (
+              (* can't output - don't know if promoted or not; NOTE that we haven't
+                 removed the elt from the queue at this point *)
+            ) 
           | Not_promoted -> 
+            ignore(Queue.take q);
             write_min_alloc_to_channel ~out_ch ~obj_id ~length;
+            incr num_allocs;
             output_from_queue_if_known ()                    
           | Promoted -> 
+            ignore(Queue.take q);
             write_maj_alloc_to_channel ~out_ch ~obj_id ~length;
+            incr num_allocs;
             output_from_queue_if_known ())
       | Collect_min(obj_id) -> 
-        write_min_collect_to_channel ~out_ch ~obj_id;        
+        ignore(Queue.take q);
+        write_min_collect_to_channel ~out_ch ~obj_id;
+        incr num_collects;
         Hashtbl.remove map obj_id;
         output_from_queue_if_known ()
       | Collect_maj(obj_id) -> 
+        ignore(Queue.take q);
         write_maj_collect_to_channel ~out_ch ~obj_id;
+        incr num_collects;
         Hashtbl.remove map obj_id;
         output_from_queue_if_known ()
   in
   Trace.Reader.iter trace (fun _time ev -> 
       match ev with
       | Alloc { obj_id; length; _ } -> 
+        incr read_allocs;
         (* add to queue and map *)
         let obj_id = (obj_id :> int) in
         Queue.add (Alloc(obj_id,length)) q;
@@ -91,10 +110,11 @@ let main () =
         Hashtbl.replace map obj_id Promoted;
         output_from_queue_if_known ();
         ()
-      | Collect obj_id -> 
+      | Collect obj_id ->
+        incr read_collects;
         let obj_id = (obj_id :> int) in
         let pr = Hashtbl.find map obj_id in
-        Hashtbl.remove map obj_id;
+        (* Hashtbl.remove map obj_id; *)
         match pr with
         | Unknown | Not_promoted -> 
           Queue.add (Collect_min(obj_id)) q;
@@ -109,9 +129,10 @@ let main () =
     (function
       | Alloc (obj_id,_) | Collect_min(obj_id) | Collect_maj(obj_id) -> 
         Hashtbl.replace map obj_id Not_promoted);
-  output_from_queue_if_known (); (* should output all remaining in queue *)
+  output_from_queue_if_known (); (* should output all remaining in queue *)  
   Stdlib.close_out_noerr out_ch;
-  Printf.printf "Max obj_id: %d\n" !max_oid;
+  Printf.printf "Qlength:%d max_obj_id:%d; num_allocs:%d (read_allocs:%d) num_collects:%d (read_collects:%d) \n" 
+    (Queue.length q) !max_oid !num_allocs !read_allocs !num_collects !read_collects;
   ()
 
 let _ = main ()

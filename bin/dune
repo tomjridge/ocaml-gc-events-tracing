@@ -3,6 +3,11 @@
  (modules Raw_shared)
  (libraries memtrace)) 
 
+(library
+ (name lookahead_shared)
+ (modules Ondisk_format_with_lookahead)
+ (libraries))
+
 (executable
  (name replay)
  (modules Replay)
@@ -19,14 +24,19 @@
  (libraries base memtrace raw_shared))
 
 (executable
+ (name replay_raw_v3)
+ (modules Replay_raw_v3)
+ (libraries lookahead_shared memtrace))
+
+(executable
  (name translate_memtrace_to_raw)
  (modules Translate_memtrace_to_raw)
  (libraries memtrace raw_shared))
 
 (executable
  (name translate_with_promote_lookahead)
- (modules Translate_with_promote_lookahead Ondisk_format_with_lookahead)
- (libraries memtrace))
+ (modules Translate_with_promote_lookahead)
+ (libraries memtrace lookahead_shared))
 
 (executable
  (name alloc_summary)
