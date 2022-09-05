@@ -14,6 +14,11 @@
  (libraries base memtrace raw_shared))
 
 (executable
+ (name replay_raw_v2)
+ (modules Replay_raw_v2)
+ (libraries base memtrace raw_shared))
+
+(executable
  (name translate_memtrace_to_raw)
  (modules Translate_memtrace_to_raw)
  (libraries memtrace raw_shared))

@@ -213,3 +213,30 @@ Let's just check that these figures seem reasonable. For queens.ctf, we can use 
 <img src="README.assets/Screenshot_20220902_155330.png" alt="Screenshot_20220902_155330" style="zoom:50%;" />
 
 And the total 1.01MiB does agree with the summary provided by memtrace-viewer.
+
+## `Replay_raw_v2`
+
+One problem with `replay_raw` is that each time an object is created, it is added to the hashtable, which causes an allocation of size 3 during the trace. This potentially disturbs the replay GC, when compared to the GC behaviour of the original trace. An alternative would be to allocate an array (rather than a hashtable) right at the beginning of the replay. We can also allocate the references at the beginning too. The hope is that, by moving these replay overhead allocations to the start of the replay, the GC behaviour during the replay more closely matches the original trace. This is implemented in `replay_raw_v2`. 
+
+The original trace, as viewed by memtrace-viewer:
+
+<img src="README.assets/Screenshot_20220902_154312.png" alt="Screenshot_20220902_154312" style="zoom:50%;" />
+
+The replay, via `replay_raw_v2`:
+
+![Screenshot_20220905_095628](README.assets/Screenshot_20220905_095628.png)
+
+Clearly the replay does not resemble the original, even with the improvements of `replay_raw_v2`.
+
+
+
+## Simulating minor heap collection
+
+OCaml has a generational GC. An object is typically allocated first on the minor heap, and when minor collection runs, the object is either collected, or promoted to the major heap. Within the memtrace trace, the events are: Alloc (for allocations), Collect (for collections) and Promote (for promotions from the minor heap to the major heap). With `replay_raw` and `replay_raw_v2` there is no attempt to simulate this minor heap: all objects are allocated as an OCaml array, and immediately linked into the object stash. When the corresponding Collect occurs, the object is unlinked from the stash, with the expectation that GC will then collect the object in a timely fashion. Promote events are ignored.
+
+If we want to simulate the minor heap, we can do the following: During replay, when we create an object we only add it to the stash if we know it is later promoted. 
+
+To implement this, we should consider another raw file format, with events: Alloc_minor, Alloc_then_promote. For each Alloc event in the memtrace, we can determine whether there is a subsequent Promote... if there is this should be recorded as Alloc_then_promote in the raw trace. (We can't directly simulate Promote events in the trace replay.)
+
+
+

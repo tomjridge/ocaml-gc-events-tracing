@@ -23,15 +23,20 @@ open Raw_shared
 let main () = 
   let trace = Memtrace.Trace.Reader.open_ ~filename:infile in
   let out_ch = Stdlib.open_out_bin outfile in
+  let max_oid = ref 0 in
   Trace.Reader.iter trace (fun _time ev -> 
       match ev with
       | Alloc { obj_id; length; _ } -> 
-        write_alloc_to_channel ~out_ch ~obj_id ~length
+        write_alloc_to_channel ~out_ch ~obj_id ~length;
+        max_oid := max !max_oid (obj_id :> int);
+        ()
       | Collect obj_id -> 
-        write_collect_to_channel ~out_ch ~obj_id
+        write_collect_to_channel ~out_ch ~obj_id;
+        ()
       | Promote _ -> () (* ignore promotes for raw files *) 
     );
   Stdlib.close_out_noerr out_ch;
+  Printf.printf "Max obj_id: %d\n" !max_oid;
   ()
 
 let _ = main ()
