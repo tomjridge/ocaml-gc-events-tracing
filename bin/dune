@@ -47,3 +47,8 @@
  (name alloc_summary)
  (modules Alloc_summary)
  (libraries memtrace))
+
+(executable
+ (name check_lookahead)
+ (modules Check_lookahead)
+ (libraries ondisk_format_with_lookahead))
