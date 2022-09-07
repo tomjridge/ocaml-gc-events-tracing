@@ -31,10 +31,14 @@ let replay in_ch max_obj_id =
   let collect_maj_cb ~obj_id = 
     allocs.(obj_id) := dummy_elt
   in
+  let promote_cb ~obj_id = 
+    ignore(obj_id);
+    ()
+  in
   try
     while true do
       Ondisk_format_with_lookahead.read_channel 
-        ~in_ch ~alloc_min_cb ~alloc_maj_cb ~collect_min_cb ~collect_maj_cb
+        ~in_ch ~alloc_min_cb ~alloc_maj_cb ~collect_min_cb ~collect_maj_cb ~promote_cb ()
     done
   with End_of_file -> ()
 

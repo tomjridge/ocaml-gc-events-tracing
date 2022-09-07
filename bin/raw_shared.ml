@@ -7,7 +7,7 @@ let write_alloc_to_channel =
     Bytes.set_int64_le buf 9 (Int64.of_int length);
     Stdlib.output_bytes out_ch buf;
     ()
-    
+
 let write_collect_to_channel = 
   let tag = 'C' in
   let buf = Bytes.create 9 in
