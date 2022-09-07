@@ -20,9 +20,12 @@ let replay in_ch max_obj_id =
     (* Printf.printf "collect_cb called %d\n" obj_id; *)
     allocs.(obj_id) := dummy_elt
   in
+  let promote_cb ~obj_id = 
+    ignore(obj_id)
+  in
   try
     while true do
-      Raw_shared.read_channel ~in_ch ~alloc_cb ~collect_cb
+      Raw_shared.read_channel ~in_ch ~alloc_cb ~collect_cb ~promote_cb ()
     done
   with End_of_file -> ()
 

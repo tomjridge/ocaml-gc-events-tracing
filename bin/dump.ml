@@ -65,7 +65,7 @@ let main () =
   | `Raw -> (
       let open Ctf_callbacks in
       let in_ch = Stdlib.open_in_bin infile in
-      Raw_shared.iter_channel ~in_ch ~alloc_cb ~collect_cb;
+      Raw_shared.iter_channel ~in_ch ~alloc_cb ~collect_cb ~promote_cb ();
       ()
     )
   | `Lookahead -> (
