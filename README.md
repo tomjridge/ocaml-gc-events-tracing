@@ -245,3 +245,33 @@ This approach is implemented. The memtrace-viewer graph now looks like:
 ![Screenshot_20220905_151343](README.assets/Screenshot_20220905_151343.png)
 
 Again, this resembles the graph from `replay_raw_v2`, and does _not_ resemble the graph from the original trace. 
+
+
+
+# Trace formats, translations, dumping and replays
+
+The following formats are available:
+
+* ctf - the original format supported by memtrace
+* raw - a binary format with Alloc, Promote and Collect events; can be replayed with minimal additional allocs
+* with_lookahead - a binary format like raw, but where the trace has been preprocessed in order to identify whether an alloc is collected from the minor heap or the major heap. Events are then Alloc_min, Alloc_maj, Collect_min, Collect_maj
+
+It is possible to translate between these formats:
+
+```
+ctf  --(translate_memtrace_to_raw)--> raw
+ctf  --(translate_with_promote_lookahead)--> with_lookahead
+```
+
+The program `dump.exe` can display traces in a plain text format. It can dump any of the 3 trace formats.
+
+It is also possible to replay a trace. 
+
+| Replay tool   | Trace format   | Notes                                                        |
+| ------------- | -------------- | ------------------------------------------------------------ |
+| replay        | ctf            |                                                              |
+| replay_raw    | raw            |                                                              |
+| replay_raw_v2 | raw            | Allocates an array to hold objects upfront. Requires command line argument to specify max object id in order to size the array. (This can obviously be improved.) |
+| replay_raw_v3 | with_lookahead | As above, but uses the with_lookahead format.                |
+
+FIXME rename raw and with_lookahead; rename replay tools; 

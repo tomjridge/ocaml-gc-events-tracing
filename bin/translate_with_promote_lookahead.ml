@@ -46,6 +46,7 @@ type obj_promoted_state = Unknown | Not_promoted | Promoted
 
 type queue_event = 
   | Alloc of int * int (* obj_id * length *)
+  | Promote of int (* obj_id *)
   | Collect_min of int 
   | Collect_maj of int
 
@@ -82,6 +83,10 @@ let main () =
             write_maj_alloc_to_channel ~out_ch ~obj_id ~length;
             incr num_allocs;
             output_from_queue_if_known ())
+      | Promote(obj_id) -> (
+          ignore(Queue.take q);
+          write_promote_to_channel ~out_ch ~obj_id;
+          output_from_queue_if_known ())
       | Collect_min(obj_id) -> 
         ignore(Queue.take q);
         write_min_collect_to_channel ~out_ch ~obj_id;
@@ -107,6 +112,7 @@ let main () =
         ()
       | Promote obj_id -> 
         let obj_id = (obj_id :> int) in
+        Queue.add (Promote(obj_id)) q;
         Hashtbl.replace map obj_id Promoted;
         output_from_queue_if_known ();
         ()
@@ -128,7 +134,11 @@ let main () =
   q |> Queue.iter 
     (function
       | Alloc (obj_id,_) | Collect_min(obj_id) | Collect_maj(obj_id) -> 
-        Hashtbl.replace map obj_id Not_promoted);
+        Hashtbl.replace map obj_id Not_promoted
+      | Promote (obj_id) -> 
+        ignore(obj_id);
+        ()
+    );
   output_from_queue_if_known (); (* should output all remaining in queue *)  
   Stdlib.close_out_noerr out_ch;
   Printf.printf "Qlength:%d max_obj_id:%d; num_allocs:%d (read_allocs:%d) num_collects:%d (read_collects:%d) \n" 
