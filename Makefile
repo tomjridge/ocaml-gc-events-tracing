@@ -1,13 +1,13 @@
 SHELL:=bash
 
-check-lookahead:
-	dune build bin/
-	dune exec -- bin/check_lookahead.exe queens.lookahead
-
 view-lookahead:
 	dune build bin/
 	dune exec -- bin/translate_with_promote_lookahead.exe queens.ctf queens.lookahead
 	dune exec -- bin/dump.exe lookahead queens.lookahead > queens.lookahead.dump
+
+check-lookahead:
+	dune build bin/
+	dune exec -- bin/check_lookahead.exe queens.lookahead
 
 dump:
 	dune build bin/

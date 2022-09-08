@@ -55,11 +55,13 @@ let main () =
   let out_ch = Stdlib.open_out_bin outfile in
   let max_oid = ref 0 in
   let num_allocs = ref 0 in
+  let num_promotes = ref 0 in
   let num_collects = ref 0 in
   (* we also record the number of allocs and collects we read from the ctf; this provides
      a sanity check that we are outputting the same number and type of events as we
      read *)
   let read_allocs = ref 0 in
+  let read_promotes = ref 0 in
   let read_collects = ref 0 in
   let q = Queue.create () in
   let map = Hashtbl.create 100 in
@@ -86,6 +88,7 @@ let main () =
       | Promote(obj_id) -> (
           ignore(Queue.take q);
           write_promote_to_channel ~out_ch ~obj_id;
+          incr num_promotes;
           output_from_queue_if_known ())
       | Collect_min(obj_id) -> 
         ignore(Queue.take q);
@@ -111,6 +114,7 @@ let main () =
         max_oid := max !max_oid (obj_id :> int);
         ()
       | Promote obj_id -> 
+        incr read_promotes;
         let obj_id = (obj_id :> int) in
         Queue.add (Promote(obj_id)) q;
         Hashtbl.replace map obj_id Promoted;
@@ -141,8 +145,8 @@ let main () =
     );
   output_from_queue_if_known (); (* should output all remaining in queue *)  
   Stdlib.close_out_noerr out_ch;
-  Printf.printf "Qlength:%d max_obj_id:%d; num_allocs:%d (read_allocs:%d) num_collects:%d (read_collects:%d) \n" 
-    (Queue.length q) !max_oid !num_allocs !read_allocs !num_collects !read_collects;
+  Printf.printf "Qlength:%d max_obj_id:%d; num_allocs:%d (read_allocs:%d) num_promotes:%d (read_promotes:%d) num_collects:%d (read_collects:%d) \n" 
+    (Queue.length q) !max_oid !num_allocs !read_allocs !num_promotes !read_promotes !num_collects !read_collects;
   ()
 
 let _ = main ()
