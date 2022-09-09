@@ -1,5 +1,16 @@
 SHELL:=bash
 
+graph_mem:
+	dune build bin/
+#	dune exec -- bin/graph_mem.exe queens.ctf | gnuplot -p -e "plot '-'"
+#	MEMTRACE=replay_queens.v3.ctf MEMTRACE_RATE=1.0 dune exec -- bin/replay_raw_v3.exe queens.raw_lookahead 40063 # replay raw and record memtrace
+#	dune exec -- bin/graph_mem.exe replay_queens.v3.ctf | gnuplot -p -e "plot '-'" 
+#	dune exec -- bin/translate_with_promote_lookahead.exe replay_queens.v3.ctf replay_queens.v3.lookahead # convert replay_queens.v3.ctf to lookahead
+#	dune exec -- bin/dump.exe lookahead replay_queens.v3.lookahead > replay_queens.v3.lookahead.dump
+	dune exec -- bin/check_lookahead.exe replay_queens.v3.lookahead
+#	dune exec -- bin/dump.exe ctf replay_queens.v3.ctf > replay_queens.v3.ctf.dump
+
+
 view-lookahead:
 	dune build bin/
 	dune exec -- bin/translate_with_promote_lookahead.exe queens.ctf queens.lookahead

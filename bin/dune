@@ -52,3 +52,8 @@
  (name check_lookahead)
  (modules Check_lookahead)
  (libraries ondisk_format_with_lookahead))
+
+(executable 
+ (name graph_mem)
+ (modules Graph_mem)
+ (libraries memtrace))

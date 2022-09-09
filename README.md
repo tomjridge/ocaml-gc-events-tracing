@@ -275,3 +275,16 @@ It is also possible to replay a trace.
 | replay_raw_v3 | with_lookahead | As above, but uses the with_lookahead format.                |
 
 FIXME rename raw and with_lookahead; rename replay tools; 
+
+# Graph of total allocated, ignoring timestamps
+
+The replay tool does not take account of timestamps: instead allocs and collects are simulated one after the other. In order to compare the behaviour of the replay against the original, it is worth plotting the total memory allocated for the original trace, but ignoring time (the allocs and collects are assumed to occur at a fixed interval). This is the program `bin/graph_mem.exe`. For the `queens.ctf` file, the output looks like:
+
+<img src="README.assets/Screenshot_20220909_093605.png" alt="Screenshot_20220909_093605" style="zoom:50%;" />
+
+This resembles the graph shown in memtrace-viewer, but should enable easier comparisons with the replayed trace. Unfortunately the replayed trace still looks completely different from the original:
+
+<img src="README.assets/Screenshot_20220909_094902.png" alt="Screenshot_20220909_094902" style="zoom:50%;" />
+
+Clearly something is very wrong with the replay tool - we would expect to see lots of minor collections, but here we seem to only see major collections.
+
