@@ -54,15 +54,13 @@ let main () =
   let trace = Memtrace.Trace.Reader.open_ ~filename:infile in
   let out_ch = Stdlib.open_out_bin outfile in
   let max_oid = ref 0 in
-  let num_allocs = ref 0 in
-  let num_promotes = ref 0 in
-  let num_collects = ref 0 in
   (* we also record the number of allocs and collects we read from the ctf; this provides
      a sanity check that we are outputting the same number and type of events as we
      read *)
   let read_allocs = ref 0 in
   let read_promotes = ref 0 in
   let read_collects = ref 0 in
+  let ca,cA,cc,cC,cP = ref 0, ref 0, ref 0, ref 0, ref 0 in
   let q = Queue.create () in
   let map = Hashtbl.create 100 in
   let rec output_from_queue_if_known () = 
@@ -78,28 +76,28 @@ let main () =
           | Not_promoted -> 
             ignore(Queue.take q);
             write_min_alloc_to_channel ~out_ch ~obj_id ~length;
-            incr num_allocs;
+            incr ca;
             output_from_queue_if_known ()                    
           | Promoted -> 
             ignore(Queue.take q);
             write_maj_alloc_to_channel ~out_ch ~obj_id ~length;
-            incr num_allocs;
+            incr cA;
             output_from_queue_if_known ())
       | Promote(obj_id) -> (
           ignore(Queue.take q);
           write_promote_to_channel ~out_ch ~obj_id;
-          incr num_promotes;
+          incr cP;
           output_from_queue_if_known ())
       | Collect_min(obj_id) -> 
         ignore(Queue.take q);
         write_min_collect_to_channel ~out_ch ~obj_id;
-        incr num_collects;
+        incr cc;
         Hashtbl.remove map obj_id;
         output_from_queue_if_known ()
       | Collect_maj(obj_id) -> 
         ignore(Queue.take q);
         write_maj_collect_to_channel ~out_ch ~obj_id;
-        incr num_collects;
+        incr cC;
         Hashtbl.remove map obj_id;
         output_from_queue_if_known ()
   in
@@ -148,9 +146,10 @@ let main () =
         ()
     );
   output_from_queue_if_known (); (* should output all remaining in queue *)  
+  assert(Queue.length q = 0);
   Stdlib.close_out_noerr out_ch;
-  Printf.printf "Qlength:%d max_obj_id:%d; num_allocs:%d (read_allocs:%d) num_promotes:%d (read_promotes:%d) num_collects:%d (read_collects:%d) \n" 
-    (Queue.length q) !max_oid !num_allocs !read_allocs !num_promotes !read_promotes !num_collects !read_collects;
+  Printf.printf "max_obj_id:%d; a:%d A:%d (tot:%d read_allocs:%d) P:%d (read_promotes:%d) c:%d C:%d (tot:%d read_collects:%d) \n" 
+    !max_oid !ca !cA (!ca + !cA) !read_allocs !cP !read_promotes !cc !cC (!cc + !cC) !read_collects;
   ()
 
 let _ = main ()

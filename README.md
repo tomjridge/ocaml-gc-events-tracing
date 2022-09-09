@@ -288,3 +288,6 @@ This resembles the graph shown in memtrace-viewer, but should enable easier comp
 
 Clearly something is very wrong with the replay tool - we would expect to see lots of minor collections, but here we seem to only see major collections.
 
+# A trivial example
+
+See `examples/trivial`. This should be easier to eyeball than the queens example.

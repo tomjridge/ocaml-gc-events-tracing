@@ -1,0 +1,3 @@
+(executable
+ (name trivial)
+ (libraries memtrace))
