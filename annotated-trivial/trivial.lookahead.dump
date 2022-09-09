@@ -25214,6 +25214,9 @@ Minor ends
 > a 15027 11
 > A 15028 22
 > A 15029 2
+
+Matches replay
+
 > a 15030 11
 > a 15031 11
 > a 15032 11
@@ -101778,7 +101781,8 @@ Erroneous promote?
 > a 52002 11
 > C 32376
 
-"Erroneous" minor promote from earlier
+"Erroneous" minor promote from earlier; presumably in replay this is actually considered
+live in major, so won't be collected at this point in replay
 
 > C 37320
 
@@ -101787,6 +101791,8 @@ Ditto
 > C 42264
 
 Ditto
+
+NOTE we stop annotating at this point
 
 > a 52003 11
 > a 52004 11

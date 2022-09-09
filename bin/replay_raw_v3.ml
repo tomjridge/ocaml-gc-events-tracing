@@ -16,8 +16,8 @@ let replay in_ch max_obj_id =
   let _ = Gc.full_major () in 
   let alloc_min_cb ~obj_id ~length = 
     ignore(obj_id);
-    (* let obj = Array.init length (fun _ -> 1234) in *)
-    let obj = Bytes.make (8 * length) (* length is measured in words *) '?' in
+    let obj = Array.init length (fun _ -> 1234) in
+    (* let obj = Bytes.make (8 * length) (\* length is measured in words *\) '?' in *)
     (* NOTE don't stash in allocs... obj was collected from minor heap *)
     ignore(obj);
     ()
@@ -38,6 +38,8 @@ let replay in_ch max_obj_id =
     ignore(obj_id);
     ()
   in
+  (* only start memtracing now *)
+  Memtrace.trace_if_requested ();
   try
     while true do
       Ondisk_format_with_lookahead.read_channel 
@@ -46,7 +48,6 @@ let replay in_ch max_obj_id =
   with End_of_file -> ()
 
 let main () = 
-  Memtrace.trace_if_requested ();
   (* first argument is the path to the .ctf file *)
   let in_ch = Stdlib.open_in_bin Sys.argv.(1) in
   (* second argument is the max obj_id; FIXME if the pre-allocation approach works well,
@@ -54,6 +55,7 @@ let main () =
   let max_obj_id = Sys.argv.(2) |> int_of_string in
   replay in_ch max_obj_id;
   Stdlib.close_in_noerr in_ch;
+  Gc.print_stat Stdlib.stdout;
   ()
 
 let _ = main ()

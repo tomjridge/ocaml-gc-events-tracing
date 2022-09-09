@@ -291,3 +291,15 @@ Clearly something is very wrong with the replay tool - we would expect to see lo
 # A trivial example
 
 See `examples/trivial`. This should be easier to eyeball than the queens example.
+
+Graph:
+
+<img src="README.assets/Screenshot_20220909_151615.png" alt="Screenshot_20220909_151615" style="zoom:50%;" />
+
+The replay looks similar, modulo the initialization phase.
+
+# Musings on the "perfect" GC comparison tool
+
+We want to isolate the GC behaviour, and study just that. So presumably pull out the GC algs and control inputs and outputs completely. TODO: isolate all the inputs and outputs for GC algs in runtime.
+
+Also: we are perhaps only interested in best-fit vs next-fit vs ocaml5-alloc. So we might want to further isolate just these algs and control the inputs and outputs. 
