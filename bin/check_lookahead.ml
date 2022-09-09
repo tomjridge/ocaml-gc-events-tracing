@@ -58,7 +58,7 @@ let main () =
     ~collect_maj_cb
     ~promote_cb
     ();
-  Printf.printf "Trace checked OK; counters: a:%d A:%d c:%d C:%d P:%d"
+  Printf.printf "Trace checked OK; counters: a:%d A:%d c:%d C:%d P:%d\n"
     !c1 !c2 !c3 !c4 !c5
 
 let _ = main ()

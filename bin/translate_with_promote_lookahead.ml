@@ -137,8 +137,12 @@ let main () =
      queue *)
   q |> Queue.iter 
     (function
-      | Alloc (obj_id,_) | Collect_min(obj_id) | Collect_maj(obj_id) -> 
-        Hashtbl.replace map obj_id Not_promoted
+      | Alloc (obj_id,_) -> 
+        (* we may be blocking because the state in the map in Unknown *)
+        (Hashtbl.find map obj_id |> function
+          | Unknown -> Hashtbl.replace map obj_id Not_promoted
+          | _ -> ())
+      | Collect_min(_obj_id) | Collect_maj(_obj_id) -> ()
       | Promote (obj_id) -> 
         ignore(obj_id);
         ()
